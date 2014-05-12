@@ -7,13 +7,9 @@ describe 'hand-ect', ()->
   ect = require '../hand-ect'
   http = require 'http'
 
-
-  server = http.createServer ho.make [
-    ect 
-      ectOption:
-        ext: '.ect'
-        root : 'test'
-    (req,res,next)->
+  ect.global.upperHelper = (string) ->
+          return string.toUpperCase();
+  hand = (req,res,next)->
       data = 
         title : 'Hello, world!',
         id : 'main',
@@ -21,12 +17,16 @@ describe 'hand-ect', ()->
           { name : 'Google', url : 'http://google.com/' },
           { name : 'Facebook', url : 'http://facebook.com/' },
           { name : 'Twitter', url : 'http://twitter.com/' }
-        ],
-        upperHelper : (string) ->
-          return string.toUpperCase();
+        ]
         
       res.ect 'sample.ect', data
 
+  server = http.createServer ho.make [
+    ect 
+      ectOption:
+        ext: '.ect'
+        root : 'test'
+    hand
   ]
 
   agent = request.agent(server);
@@ -38,6 +38,7 @@ describe 'hand-ect', ()->
       .expect /.*<html>.*/ 
       .expect /.*href.*/  
       .expect /.*Google.*/ 
+      .expect /.*<h1>HELLO.*/ 
       .end done
  
 

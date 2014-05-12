@@ -8,25 +8,34 @@ handEct = (option={})->
     ext: '.ect'
   ectRender = ectModule ectOption 
 
-  for own key, value of option.helpers
-    handEct.helpers[key] = value
+  for own key, value of option.global
+    handEct.global[key] = value
 
   return (req,res,next)-> 
 
-    ect = (tempalteId, data = null )->
-      data = res.data unless data
-      filepath = handEct.helpers.fnPath tempalteId 
+    ect = (tempalteId, InData = {} )->
 
-      for own key, value of handEct.helpers 
-        data[key] = value
-    
-      html = ectRender.render filepath, data
+      filepath = handEct.global.fnPath tempalteId 
+
+      viewData = {}
+      for own key, value of handEct.global 
+        viewData[key] = value
+
+      for own key, value of res.data 
+        viewData[key] = value
+
+      for own key, value of InData 
+        viewData[key] = value
+      
+
+
+      html = ectRender.render filepath, viewData
       res.writeHead 200
       res.end html
     res.ect = ect
     return next()
 
-handEct.helpers = 
+handEct.global = 
   fnPath : (templateId)-> return templateId
 
 

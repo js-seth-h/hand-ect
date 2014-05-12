@@ -1,20 +1,72 @@
 # hand-ect
 
 > support `ect` template system through `res.ect` 
+> support `helpers` function in view 
+> compatible with connec/express
 
-
-## Why made this?
- 
-## Features
- 
 
 ## Examples
 
  
 ```coffee  
 
-```  
+  ho = require 'handover'
+  ect = require '../hand-ect'
+  http = require 'http'
+
+
+  ect.global.upperHelper = (string) ->  # global scope, apply every view
+    return string.toUpperCase();
+
+  hand = (req,res,next)->
+      data = 
+        title : 'Hello, world!',
+        id : 'main',
+        links: [
+          { name : 'Google', url : 'http://google.com/' },
+          { name : 'Facebook', url : 'http://facebook.com/' },
+          { name : 'Twitter', url : 'http://twitter.com/' }
+        ],
+        upperHelper : (string) ->  # local scope, apply this view
+          return string.toUpperCase();
+        
+      res.ect 'sample.ect', data
+
+  server = http.createServer ho.make [
+    ect 
+      ectOption:
+        ext: '.ect'
+        root : 'test'
+    hand
+  ]
  
+# or with connect/express
+
+  connect = require 'connect'
+  app = connect()
+  app.use ect()
+  app.use hand
+```  
+
+## Important! - Shadowing of Datas
+  
+ect.global < res.data < argument 'data'
+
+```coffee 
+#Given
+  ect.global.foo = 'a'
+  res.foo =  'b'
+#result is b
+```
+
+```coffee 
+#Given
+  ect.global.foo = 'a'
+  res.foo =  'b'
+  res.ect 'sample.ect', { foo : 'c'}
+#result is c
+```
+
  
 ## License
 
