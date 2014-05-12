@@ -1,8 +1,8 @@
 {
   "name": "hand-ect",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "support Http Stateful by Cookie and Session for handover, compatible with connect/express, ",
-  "main": "hand-etc.coffee",
+  "main": "hand-ect.coffee",
   "scripts": {
     "test": "set TEST=true && mocha --compilers coffee:coffee-script/register   --reporter spec",
     "start": "set TEST=true && set DEBUG=hand* && mocha --compilers coffee:coffee-script/register   --reporter spec"
