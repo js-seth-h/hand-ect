@@ -3,12 +3,12 @@ request = require 'supertest'
 
 describe 'hand-ect', ()->
 
-  ho = require 'handover'
-  ect = require '../hand-ect'
+  flyway = require 'flyway'
+  ect = require '../src'
   http = require 'http'
 
-  ect.global.upperHelper = (string) ->
-          return string.toUpperCase();
+  ect.configure.upperHelper = (string) ->
+    return string.toUpperCase();
   hand = (req,res,next)->
       data = 
         title : 'Hello, world!',
@@ -21,7 +21,7 @@ describe 'hand-ect', ()->
         
       res.ect 'sample.ect', data
 
-  server = http.createServer ho.make [
+  server = http.createServer flyway [
     ect 
       ectOption:
         ext: '.ect'

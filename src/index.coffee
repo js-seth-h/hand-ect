@@ -1,27 +1,26 @@
 ectModule = require('ect')
- 
+debug = require('debug') 'httpware-ect'
 
-handEct = (option={})->
+httpwareEct = (option={})->
   
   ectOption = option.ectOption || 
     cache: false  
     ext: '.ect'
   ectRender = ectModule ectOption 
 
-  for own key, value of option.global
-    handEct.global[key] = value
+  for own key, value of option.configure
+    httpwareEct.configure[key] = value
+
 
   return (req,res,next)-> 
 
     ect = (tempalteId, InData = {} )->
+      debug 'send ect ', tempalteId
 
-      filepath = handEct.global.fnPath tempalteId 
+      filepath = httpwareEct.configure.fnPath tempalteId 
 
       viewData = {}
-      for own key, value of handEct.global 
-        viewData[key] = value
-
-      for own key, value of res.data 
+      for own key, value of httpwareEct.configure 
         viewData[key] = value
 
       for own key, value of InData 
@@ -30,13 +29,14 @@ handEct = (option={})->
 
 
       html = ectRender.render filepath, viewData
+      debug 'render file ', filepath
       res.writeHead 200
       res.end html
     res.ect = ect
     return next()
 
-handEct.global = 
+httpwareEct.configure = 
   fnPath : (templateId)-> return templateId
 
 
-module.exports = exports = handEct
+module.exports = exports = httpwareEct

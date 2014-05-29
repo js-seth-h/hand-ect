@@ -1,39 +1,34 @@
 {
-  "name": "hand-ect",
+  "name": "httpware-ect",
   "version": "0.0.2",
-  "description": "support Http Stateful by Cookie and Session for handover, compatible with connect/express, ",
-  "main": "hand-ect.coffee",
+  "description": "monkey patch of `res.ect`(HTTP Response)",
+  "main": "lib",
   "scripts": {
-    "test": "set TEST=true && mocha --compilers coffee:coffee-script/register   --reporter spec",
-    "start": "set TEST=true && set DEBUG=hand* && mocha --compilers coffee:coffee-script/register   --reporter spec"
+    "build": "coffee -c -b -o lib src  ",
+    "clean": "rm -r lib",
+    "prepublish": "npm run-script build",
+    "postpublish": "npm run-script clean",
+    "test": "set TEST=true && mocha --compilers coffee:coffee-script/register   --reporter spec"
   },
   "repository": {
     "type": "git",
-    "url": "git://github.com/js-seth-h/hand-response.git"
+    "url": "git://github.com/js-seth-h/httpware-ect.git"
   },
   "keywords": [
-    "handover",
-    "connect",
-    "response"
+    "ect"
   ],
   "author": "js.seth.h@gmail.com",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/js-seth-h/hand-ect/issues"
+    "url": "https://github.com/js-seth-h/httpware-ect/issues"
   },
-  "homepage": "https://github.com/js-seth-h/hand-ect",
+  "homepage": "https://github.com/js-seth-h/httpware-ect",
   "dependencies": {
     "debug": "^0.8.1",
     "ect": "^0.5.9"
   },
-  "devDependencies": {
-    "handover": "^0.2.1",
-    "coffee-script": "^1.7.1",
-    "connect": "^3.0.0-rc.2",
-    "mocha": "^1.18.2",
+  "devDependencies": {  
+    "flyway": "0.1.0-2",
     "supertest": "^0.12.1"
-  },
-  "directories": {
-    "test": "test"
   }
 }

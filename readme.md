@@ -1,7 +1,7 @@
-# hand-ect
+# httpware-ect
 
 > support `ect` template system through `res.ect` 
-> support `helpers` function in view 
+> support `helpers` function in view  (by `configure`)
 > compatible with connec/express
 
 
@@ -9,13 +9,12 @@
 
  
 ```coffee  
-
-  ho = require 'handover'
-  ect = require '../hand-ect'
+ 
+  ect = require '../httpware-ect'
   http = require 'http'
 
 
-  ect.global.upperHelper = (string) ->  # global scope, apply every view
+  ect.configure.upperHelper = (string) ->  # configure scope, apply every view
     return string.toUpperCase();
 
   hand = (req,res,next)->
@@ -32,7 +31,7 @@
         
       res.ect 'sample.ect', data
 
-  server = http.createServer ho.make [
+  server = http.createServer flyway [
     ect 
       ectOption:
         ext: '.ect'
@@ -50,24 +49,15 @@
 
 ## Important! - Shadowing of Datas
   
-ect.global < res.data < argument 'data'
+ect.configure < argument 'data'
 
 ```coffee 
 #Given
-  ect.global.foo = 'a'
-  res.foo =  'b'
+  ect.configure.foo = 'a'
+  res.ect 'sample.ect', { foo : 'b'}
 #result is b
 ```
 
-```coffee 
-#Given
-  ect.global.foo = 'a'
-  res.foo =  'b'
-  res.ect 'sample.ect', { foo : 'c'}
-#result is c
-```
-
- 
 ## License
 
 (The MIT License)
